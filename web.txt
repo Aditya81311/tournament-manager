@@ -1,0 +1,42 @@
+Web App
+│
+├── Home Page
+│   ├── Navigation Bar
+│   │   ├── Register / Login
+│   │   ├── Games
+│   │   ├── Teams
+│   │   ├── Tournaments
+│   │   └── Leaderboard
+│   └── Dashboard (after login)
+│
+├── User Section
+│   ├── Register Form (creates row in users)
+│   ├── Login Form (authenticates user)
+│   └── Profile Page (shows user info, teams joined)
+│
+├── Games Section
+│   ├── Add Game Form (admin only → inserts into games)
+│   └── List Games (shows all games)
+│
+├── Teams Section
+│   ├── Create Team Form
+│   │   ├── Team name
+│   │   ├── Select game (dropdown from games)
+│   │   └── Captain = current logged-in user
+│   │       → inserts into teams + team_members (captain row)
+│   ├── Join Team Form
+│   │   ├── Dropdown of available teams
+│   │   └── Enroll button
+│   │       → inserts into team_members
+│   └── My Teams (shows teams user is enrolled in)
+│
+├── Tournaments Section
+│   ├── Create Tournament Form (admin → inserts into tournaments)
+│   ├── List Tournaments
+│   └── Tournament Details
+│       ├── Matches (from matches table)
+│       └── Leaderboard (from leader_board table)
+│
+└── Leaderboard Section
+    ├── View Leaderboard by Tournament
+    └── Team Stats (played, wins, score_for, score_against)
