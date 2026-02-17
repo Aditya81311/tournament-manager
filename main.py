@@ -324,7 +324,8 @@ class Fetch_data():
         conn = get_db_connection()
         cur = conn.cursor()
         teams = cur.execute('''
-        SELECT * FROM teams 
+        SELECT t.team_id , t.team_name ,t.game_id, u.user_name FROM teams t 
+            JOIN users u ON t.team_captain_id = u.user_id;
         ''').fetchall()
         conn.close()
         return [dict(row) for row in teams]
