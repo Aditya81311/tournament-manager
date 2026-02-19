@@ -76,7 +76,7 @@
                 <td>{{ tournament.end_date }}</td>
                 <td>{{ tournament.status }}</td>
                 <td>
-                    <form action="/delete_tournament" method="POST">
+                    <form action="/delete_tournaments" method="POST">
                         <input type="hidden" name="tournament_id" value="{{ tournament.tournament_id }}">
                         <button type="submit">Delete</button>
                     </form>

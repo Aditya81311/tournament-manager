@@ -97,7 +97,7 @@ def show_delete_tournaments():
         # tournament_id = request.form["tournament_id"]
         tournaments = Fetch_data.fetch_tournaments(None)
     return render_template('delete_tournaments.html',tournaments = tournaments)
-@app.route('/delete_tournament', methods=['POST'])
+@app.route('/delete_tournaments', methods=['POST'])
 def delete_tournament():
     if request.method == "POST":
         tournament_id = request.form["tournament_id"]
@@ -105,11 +105,11 @@ def delete_tournament():
         delete.delete_tournament()
     return "success"
 
-@app.route('/create_match', methods=['GET', 'POST'])
+@app.route('/create_matches', methods=['GET', 'POST'])
 def create_match():
     if request.method == "GET":
         tournaments = Fetch_data.fetch_tournaments(None)
-        return render_template('create_match.html',tournaments = tournaments)
+        return render_template('create_matches.html',tournaments = tournaments)
     if request.method == "POST":
         # match_id = request.form["match_id"]
         tournament_id = request.form["tournament_id"]

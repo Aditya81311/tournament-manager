@@ -2,10 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Index</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .nav-box {
+            display: inline-block;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 12px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Success</h1>
+    <h1>Welcome to the Management Portal</h1>
+    <div class="nav-box">
+        <ul>
+            <!-- Games -->
+            <li><a href="/add_games">Create Game</a></li>
+            <li><a href="/list_games">List Games</a></li>
+            <li><a href="/update_games">Update Game</a></li>
+            <li><a href="/delete_games">Delete Game</a></li>
+
+            <!-- Tournaments -->
+            <li><a href="/create_tournaments">Create Tournament</a></li>
+            <li><a href="/list_tournaments">List Tournaments</a></li>
+            <li><a href="/update_tournaments">Update Tournament</a></li>
+            <li><a href="/delete_tournaments">Delete Tournament</a></li>
+
+            <!-- Matches -->
+            <li><a href="/create_matches">Create Match</a></li>
+            <li><a href="/list_matches">List Matches</a></li>
+            <li><a href="/update_matches">Update Match</a></li>
+            <li><a href="/delete_matches">Delete Match</a></li>
+        </ul>
+    </div>
 </body>
 </html>
