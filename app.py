@@ -75,9 +75,16 @@ def list_tournaments():
         tournaments = lists.list_tournaments()
     return render_template('list_tournaments.html',tournaments = tournaments)
 
-
-@app.route('/update_tournament', methods=['GET', 'POST'])
-def update_tournament():
+@app.route('/update_tournaments', methods=['GET'])
+def show_update_page():
+    if request.method == "GET":
+        games = Games(None,None,None)
+        listgames = games.list_games()
+        lists = Tournaments(None,None, None,None,None,None)
+        tournaments = lists.list_tournaments()
+    return render_template('update_tournaments.html',games = listgames, tournaments = tournaments)
+@app.route('/update_tournaments', methods=['POST'])
+def update_tournaments():
     if request.method == "POST":
         tournament_id = request.form["tournament_id"]
         name = request.form["name"]
@@ -87,7 +94,7 @@ def update_tournament():
         status  = request.form["status"]
         update = Tournaments(tournament_id,name, game_id, start_date, end_date, status)
         update.update_tournament()
-    return render_template('update_tournament.html')
+    return "success"
 
 
 @app.route('/delete_tournament', methods=['GET', 'POST'])

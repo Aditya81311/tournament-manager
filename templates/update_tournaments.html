@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Tournament</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-box {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 380px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+            color: #444;
+        }
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <h2>Update Tournament</h2>
+        <form action="/update_tournaments" method="POST">
+            <label for="tournament_id">Select Tournament:</label>
+            <select id="tournament_id" name="tournament_id" required>
+                {% for tournament in tournaments %}
+                    <option value="{{ tournament.tournament_id }}">{{ tournament.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="name">Tournament Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="game_id">Select Game:</label>
+            <select id="game_id" name="game_id" required>
+                {% for game in games %}
+                    <option value="{{ game.game_id }}">{{ game.game_name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" required>
+
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date" required>
+
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
+                <option value="upcoming">Upcoming</option>
+                <option value="ongoing">Ongoing</option>
+                <option value="completed">Completed</option>
+            </select>
+
+            <button type="submit">Update</button>
+        </form>
+    </div>
+</body>
+</html>
