@@ -309,9 +309,33 @@ class Fetch_data():
         conn.close()
         return [dict(row) for row in captains]
 
-    def fetch__leader_board(self):
-        pass
-
+    def fetch_leader_board(self):
+        conn = get_db_connection()
+        curr = conn.cursor()
+        data = curr.execute('''
+        SELECT 
+		    tm.team_id,
+		    tm.team_name,
+		    g.game_name,
+		    SUM(b.played) AS played,
+		    SUM(b.points) AS points,
+		    SUM(b.wins) AS wins ,
+		    SUM(b.score_for) AS score_for ,
+		    SUM(b.score_against) AS score_against ,
+		    b.updated	FROM leader_board b
+ 	    LEFT JOIN tournaments t ON b.tournament_id = t.tournament_id
+ 	    LEFT JOIN teams tm ON tm.team_id = b.team_id
+ 	    LEFT JOIN matches m ON b.match_id = m.match_id
+	    LEFT JOIN games g ON t.game_id = g.game_id
+	    GROUP BY tm.team_id,
+		    tm.team_name,
+		    g.game_name,b.updated,b.points,
+		    b.score_for , b.score_against
+	    ORDER BY points DESC, (b.score_for - b.score_against) DESC
+            ''').fetchall()
+        conn.commit()
+        conn.close()
+        return [dict(row) for row in data]
     def fetch_games(self):
         games = Games(None,None,None)
         listgames = games.list_games()
@@ -338,9 +362,10 @@ class Fetch_data():
 
 
 if __name__=="__main__":
-    data = Fetch_data(1)
-    # print(data.fetch_users())
-    # print(data.fetch_user_info())
-    # print(data.fetch_captain())
+    data = Fetch_data(None)
+    print(data.fetch_users())
+    print(data.fetch_user_info())
+    print(data.fetch_captain())
     print(data.fetch_games())
-    # print(data.fetch_teams())
+    print(data.fetch_teams())
+    print(data.fetch_leader_board())

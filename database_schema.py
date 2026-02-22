@@ -90,24 +90,22 @@ class Data_base():
             score_for INTEGER NOT NULL,
             score_against INTEGER NOT NULL,
             updated DATE NOT NULL,
+        	losses INTEGER DEFAULT 0,
+        	points INTEGER DEFAULT 0,
             FOREIGN KEY (tournament_id) REFERENCES tournaments(tournament_id),
             FOREIGN KEY (team_id) REFERENCES teams(team_id),
             FOREIGN KEY (match_id) REFERENCES matches(match_id),
             UNIQUE (tournament_id, team_id, match_id)
-            )
-
+        )
         ''')
         print("Leader Board Table Created")
 if __name__ == "__main__":
-    # create_tables = Data_base()
-    # create_tables.user_table()
-    # create_tables.team_table()
-    # create_tables.team_member()
-    # create_tables.games_table()
-    # create_tables.tournament_table()
-    # create_tables.matches_table()
-    # create_tables.leader_board_table()
-    print(cur.execute('SELECT * FROM users').fetchall())
-    conn.commit()
-    conn.close()
+    create_tables = Data_base()
+    create_tables.user_table()
+    create_tables.team_table()
+    create_tables.team_member()
+    create_tables.games_table()
+    create_tables.tournament_table()
+    create_tables.matches_table()
+    create_tables.leader_board_table()
     

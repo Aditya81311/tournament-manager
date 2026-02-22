@@ -22,6 +22,19 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user_id" not in session:
+            flash("Please log in first.", "warning")
+            return redirect(url_for("login"))
+        if session.get("user_role") not in ["user", "admin"]:
+            flash("You cannot access this page.", "danger")
+            return redirect(url_for("home"))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 def get_db_connection():
     conn = sqlite3.connect("database.db")
     conn.row_factory = sqlite3.Row
@@ -113,18 +126,21 @@ def create_admin():
     return render_template("create_admin.html")
 
 @app.route("/")
+@login_required
 def home():
     if "user_id" not in session:
         return redirect(url_for("login"))
     return render_template("index.html", role=session.get("user_role"), name=session.get("user_name"))
 
 @app.route("/list_games",methods = ["GET","POST"])
+@login_required
 def list_games():
     if request.method == "GET":
         games = Fetch_data.fetch_games(None)
     return render_template("games.html",games = games)
 
 @app.route("/add_games",methods = ["GET","POST"])
+@login_required
 @admin_required
 def add_games():
     if request.method == "POST":
@@ -135,6 +151,7 @@ def add_games():
     return render_template("add_games.html")
 
 @app.route("/update_games",methods = ["GET","POST"])
+@login_required
 @admin_required
 def update_games():
     if request.method == "GET":
@@ -149,6 +166,7 @@ def update_games():
     return render_template("update_games.html")
 
 @app.route("/delete_games",methods = ["GET","POST"])
+@login_required
 @admin_required
 def delete_games():
     games = Fetch_data.fetch_games(None)
@@ -161,6 +179,7 @@ def delete_games():
     return render_template("delete_games.html",games = games)
 
 @app.route('/create_tournaments', methods=['GET','POST'])
+@login_required
 @admin_required
 def create_tournament():
     if request.method == "GET":
@@ -179,11 +198,13 @@ def create_tournament():
     
 
 @app.route('/list_tournaments', methods=['GET'])
+@login_required
 def list_tournaments():
     if request.method == "GET":
         # tournament_id = request.form["tournament_id"]
         tournaments = Fetch_data.fetch_tournaments(None)
     return render_template('list_tournaments.html',tournaments = tournaments)
+@login_required
 @admin_required
 @app.route('/update_tournaments', methods=['GET','POST'])
 def update_tournaments():
@@ -203,6 +224,7 @@ def update_tournaments():
     return render_template('update_tournaments.html',games = games, tournaments = tournaments)
 
 @app.route('/delete_tournaments', methods=['POST'])
+@login_required
 @admin_required
 def delete_tournament():
     if request.method == "GET":
@@ -216,6 +238,7 @@ def delete_tournament():
     return render_template('delete_tournaments.html')
 
 @app.route('/create_matches', methods=['GET', 'POST'])
+@login_required
 def create_match():
     if request.method == "GET":
         tournaments = Fetch_data.fetch_tournaments(None)
@@ -232,6 +255,7 @@ def create_match():
     return render_template('create_matches.html')
     
 @app.route('/list_matches', methods=['GET'])
+@login_required
 def list_matches():
     if request.method == "GET":
         matches = Fetch_data.fetch_matches(None)
@@ -239,6 +263,8 @@ def list_matches():
 
 
 @app.route('/update_matches', methods=['GET', 'POST'])
+@login_required
+@admin_required
 def update_match():
     if request.method == "GET":
         tournaments = Fetch_data.fetch_tournaments(None)
@@ -256,6 +282,8 @@ def update_match():
         return render_template('update_matches.html')
     
 @app.route('/delete_matches', methods=['GET', 'POST'])
+@login_required
+@admin_required
 def delete_match():
     if request.method  == "GET":
         matches = Fetch_data.fetch_matches(None)
@@ -266,6 +294,12 @@ def delete_match():
         delete.delete_match()
         return render_template('delete_matches.html')
 
+@app.route("/leader_board",methods = ["GET","POST"])
+@login_required
+def leader_board():
+    if request.method == "GET":
+        leaderboard = Fetch_data.fetch_leader_board(None)
+        return render_template("leader_board.html",leaderboard = leaderboard)
 
 if __name__ == "__main__":
     app.run(debug=True , host="0.0.0.0",port = 5000)

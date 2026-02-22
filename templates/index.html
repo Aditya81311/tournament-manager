@@ -12,7 +12,7 @@
         <a href="/list_games">Games</a>
         <a href="/teams">Teams</a>
         <a href="/list_tournaments">Tournaments</a>
-        <a href="/leaderboard">Leaderboard</a>
+        <a href="/leader_board">Leaderboard</a>
         {% if session.get("user_id") %}
             <a href="/logout">Logout</a>
         {% else %}
@@ -61,7 +61,7 @@
                     </div>
                     <div class="card">
                         <h2>Leaderboard</h2>
-                        <a href="/leaderboard">View Leaderboard</a>
+                        <a href="/leader_board">View Leaderboard</a>
                     </div>
                 </div>
             {% else %}
@@ -82,7 +82,7 @@
                     </div>
                     <div class="card">
                         <h2>Leaderboard</h2>
-                        <a href="/leaderboard">View Leaderboard</a>
+                        <a href="/leader_board">View Leaderboard</a>
                     </div>
                 </div>
             {% endif %}
