@@ -223,7 +223,7 @@ def update_tournaments():
         update.update_tournament()
     return render_template('update_tournaments.html',games = games, tournaments = tournaments)
 
-@app.route('/delete_tournaments', methods=['POST'])
+@app.route('/delete_tournaments', methods=['GET','POST'])
 @login_required
 @admin_required
 def delete_tournament():
