@@ -127,6 +127,20 @@ def Join_Teams(team_id,user_id):
     conn.commit()
     conn.close()
 
+def User_teams(user_id):
+    conn = get_db_connection()
+    curr = conn.cursor()
+    user_teams = curr.execute('''
+        SELECT t.team_id , t.team_name , g.game_name , u.user_name  FROM team_members tm
+        JOIN teams t ON tm.team_id = t.team_id
+        JOIN users u ON t.team_captain_id = u.user_id
+        JOIN games g ON t.game_id = g.game_id
+        WHERE tm.user_id = ?
+        ''',(str(user_id))).fetchall()
+    conn.commit()
+    conn.close()
+    return [dict(row) for row in user_teams]
+
 class Games():
     def __init__(self,game_id,game_name,game_genre):
         self.game_id = game_id

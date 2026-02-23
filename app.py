@@ -1,5 +1,5 @@
 from flask import Flask, render_template , request , redirect, url_for, session, flash
-from main import Users, Teams,Games,Tournaments,Matches,Fetch_data , Join_Teams
+from main import Users, Teams,Games,Tournaments,Matches,Fetch_data , Join_Teams , User_teams
 import sqlite3
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
@@ -359,6 +359,14 @@ def join_teams():
         user_id = session.get("user_id")
         Join_Teams(team_id,user_id)
         return redirect(url_for("list_teams"))
+
+@app.route("/user_teams",methods =["GET","POST"] )
+@login_required
+def user_teams():
+    if request.method == "GET":
+        user_id = session.get("user_id")
+        teams = User_teams(user_id)
+        return render_template("user_teams.html",teams = teams)
 
 @app.route("/leader_board",methods = ["GET","POST"])
 @login_required
