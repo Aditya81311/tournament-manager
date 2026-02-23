@@ -69,7 +69,7 @@ class Teams():
                self.team_name = team_name
                self.game_id = game_id
                self.team_captain_id = team_captain_id
-               
+
     def create_team(self):
         conn = get_db_connection()
         cur = conn.cursor()
@@ -116,7 +116,17 @@ class Teams():
         ''', (self.team_id,))
         conn.commit()
         conn.close()
-  
+
+def Join_Teams(team_id,user_id):
+    conn = get_db_connection()
+    curr = conn.cursor()
+    curr.execute('''
+    INSERT INTO team_members(team_id, user_id)
+    VALUES(?,?)
+    ''',(team_id,user_id))
+    conn.commit()
+    conn.close()
+
 class Games():
     def __init__(self,game_id,game_name,game_genre):
         self.game_id = game_id

@@ -1,10 +1,9 @@
 from flask import Flask, render_template , request , redirect, url_for, session, flash
-from main import Users, Teams,Games,Tournaments,Matches,Fetch_data
+from main import Users, Teams,Games,Tournaments,Matches,Fetch_data , Join_Teams
 import sqlite3
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 from functools import wraps
-from flask import session, redirect, url_for, flash
 
 app = Flask(__name__)
 
@@ -348,6 +347,18 @@ def delete_teams():
         delete = Teams(team_id,None,None,None)
         delete.delete_team()
         return render_template('delete_teams.html')
+
+@app.route("/join_teams",methods = ["GET","POST"])
+@login_required
+def join_teams():
+    if request.method  == "GET":
+        teams = Fetch_data.fetch_teams(None)
+        return render_template('join_teams.html',teams = teams) 
+    if request.method == "POST":
+        team_id = request.form["team_id"]
+        user_id = session.get("user_id")
+        Join_Teams(team_id,user_id)
+        return redirect(url_for("list_teams"))
 
 @app.route("/leader_board",methods = ["GET","POST"])
 @login_required

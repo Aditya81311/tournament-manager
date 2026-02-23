@@ -36,8 +36,6 @@ class Data_base():
             member_id INTEGER PRIMARY KEY ,
             team_id INTEGER NOT NULL,
             user_id INTEGER NOT NULL,
-            join_date DATE NOT NULL,
-            is_captain BOOLEAN NOT NULL DEFAULT FALSE,
             FOREIGN KEY (team_id) REFERENCES teams(team_id),
             FOREIGN KEY (user_id) REFERENCES users(user_id),
             UNIQUE (team_id, user_id)
