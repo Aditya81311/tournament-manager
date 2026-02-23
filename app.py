@@ -147,6 +147,7 @@ def add_games():
         game_genre = request.form["game_genre"]
         game = Games(None,game_name,game_genre)
         game.add_game()
+        flash("Game Added Successfully",'success')
     return render_template("add_games.html")
 
 @app.route("/update_games",methods = ["GET","POST"])
@@ -162,6 +163,7 @@ def update_games():
         game_genre = request.form["game_genre"]
         update = Games(game_id,game_name,game_genre)
         update.update_game()
+        flash("Game Updated Successfully",'success')
     return render_template("update_games.html")
 
 @app.route("/delete_games",methods = ["GET","POST"])
@@ -175,6 +177,7 @@ def delete_games():
         game_id = request.form["game_id"]
         delete = Games(game_id,None,None)
         delete.delete_game()
+        flash("Game Deleted!",'danger')
     return render_template("delete_games.html",games = games)
 
 @app.route('/create_tournaments', methods=['GET','POST'])
@@ -193,6 +196,7 @@ def create_tournament():
         status  = request.form["status"]
         create = Tournaments(None,name, game_id, start_date, end_date, status)
         create.create_tournament()
+        flash("Tournament Created Successfully",'success')
     return render_template('create_tournaments.html')
     
 
@@ -203,6 +207,7 @@ def list_tournaments():
         # tournament_id = request.form["tournament_id"]
         tournaments = Fetch_data.fetch_tournaments(None)
     return render_template('list_tournaments.html',tournaments = tournaments)
+
 @login_required
 @admin_required
 @app.route('/update_tournaments', methods=['GET','POST'])
@@ -220,6 +225,8 @@ def update_tournaments():
         status  = request.form["status"]
         update = Tournaments(tournament_id,name, game_id, start_date, end_date, status)
         update.update_tournament()
+        flash("Tournament Updated Successfully",'success')
+
     return render_template('update_tournaments.html',games = games, tournaments = tournaments)
 
 @app.route('/delete_tournaments', methods=['GET','POST'])
@@ -234,6 +241,7 @@ def delete_tournament():
         tournament_id = request.form["tournament_id"]
         delete = Tournaments(tournament_id,None, None,None,None,None)
         delete.delete_tournament()
+        flash("Tournament Deleted!",'danger')
     return render_template('delete_tournaments.html')
 
 @app.route('/create_matches', methods=['GET', 'POST'])
@@ -251,6 +259,8 @@ def create_match():
         status = request.form["status"]
         create = Matches(None,tournament_id, match_no, round_no, scheduled_at, status)
         create.add_match()
+        flash("Match Created Successfully",'success')
+
     return render_template('create_matches.html')
     
 @app.route('/list_matches', methods=['GET'])
@@ -278,6 +288,7 @@ def update_match():
         status = request.form["status"]
         create = Matches(None,tournament_id,None, round_no, scheduled_at, status)
         create.update_match()
+        flash("Match Updated Successfully",'success')
         return render_template('update_matches.html')
     
 @app.route('/delete_matches', methods=['GET', 'POST'])
@@ -291,6 +302,7 @@ def delete_match():
         match_id = request.form["match_id"]
         delete = Matches(match_id,None,None,None,None,None)
         delete.delete_match()
+        flash("Match Deleted",'danger')
         return render_template('delete_matches.html')
 
 @app.route("/list_teams",methods = ["GET","POST"])
@@ -313,6 +325,7 @@ def create_teams():
         team_captain_id = request.form["team_captain_id"]
         team = Teams(None,team_name,game_id,team_captain_id)
         team.create_team()
+        flash("Team Created Successfully",'success')
     return render_template("create_teams.html")
 
 @app.route("/update_teams",methods = ["GET","POST"])
@@ -331,6 +344,7 @@ def update_teams():
         team_captain_id = request.form["team_captain_id"]
         team = Teams(team_id,team_name,game_id,team_captain_id)
         team.update_team()
+        flash("Team Updated Successfully",'success')
         print(team_name,game_id,team_captain_id,team_id)
         print("Team Updated")
     return render_template("update_teams.html")
@@ -346,6 +360,7 @@ def delete_teams():
         team_id = request.form["team_id"]
         delete = Teams(team_id,None,None,None)
         delete.delete_team()
+        flash("Team Deleted!",'danger')
         return render_template('delete_teams.html')
 
 @app.route("/join_teams",methods = ["GET","POST"])
@@ -358,6 +373,7 @@ def join_teams():
         team_id = request.form["team_id"]
         user_id = session.get("user_id")
         Join_Teams(team_id,user_id)
+        flash("Team Joined Successfully",'info')
         return redirect(url_for("list_teams"))
 
 @app.route("/user_teams",methods =["GET","POST"] )
