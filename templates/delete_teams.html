@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena — Delete Teams</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="page-header">
+            <h2>Delete <span>Teams</span></h2>
+            <span class="count-badge">{{ teamss|length }} entries</span>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Team Name</th>
+                        <th>Game ID #</th>
+                        <th>Game Name</th>
+                        <th>Captain At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in teams %}
+                    <tr>
+                         <td>#{{team.team_id }}</td>
+                        <td>{{ team.team_name}}</td> 
+                        <td>{{ team.game_id}}</td>
+                        <td>{{ team.game_name }}</td>
+                        <td>{{ team.user_name }}</td>
+                        <td>
+                            <form action="/delete_teams" method="POST">
+                                <input type="hidden" name="team_id" value="{{ team.team_id }}">
+                                <button type="submit" class="btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

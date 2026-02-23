@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena — teams</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="page-header">
+            <h2><span>⬡</span> teams</h2>
+            <span class="count-badge">{{ teams|length }} teams</span>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Game_ID</th>
+                        <th>Game</th>
+                        <th>Captain</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in teams %}
+                    <tr>
+                        <td>#{{team.team_id }}</td>
+                        <td>{{ team.team_name}}</td> 
+                        <td>{{ team.game_id}}</td>
+                        <td>{{ team.game_name }}</td>
+                        <td>{{ team.user_name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

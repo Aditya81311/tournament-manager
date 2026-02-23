@@ -339,7 +339,7 @@ class Fetch_data():
     def fetch_games(self):
         games = Games(None,None,None)
         listgames = games.list_games()
-        return listgames
+        return [dict(row) for row in listgames]
     
     def fetch_tournaments(self):
         lists = Tournaments(None,None, None,None,None,None)
@@ -354,8 +354,9 @@ class Fetch_data():
         conn = get_db_connection()
         cur = conn.cursor()
         teams = cur.execute('''
-        SELECT t.team_id , t.team_name ,t.game_id, u.user_name FROM teams t 
-            JOIN users u ON t.team_captain_id = u.user_id;
+        SELECT t.team_id , t.team_name ,t.game_id,g.game_name, u.user_name FROM teams t 
+            JOIN users u ON t.team_captain_id = u.user_id
+            JOIN games g ON t.game_id = g.game_id
         ''').fetchall()
         conn.close()
         return [dict(row) for row in teams]

@@ -294,6 +294,61 @@ def delete_match():
         delete.delete_match()
         return render_template('delete_matches.html')
 
+@app.route("/list_teams",methods = ["GET","POST"])
+@login_required
+def list_teams():
+    if request.method == "GET":
+        teams = Fetch_data.fetch_teams(None)
+        return render_template("list_teams.html",teams = teams)
+
+@app.route("/create_teams",methods = ["GET","POST"])
+@login_required
+def create_teams():
+    if request.method == "GET":
+        games = Fetch_data.fetch_games(None)
+        users = Fetch_data.fetch_users(None)
+        return render_template("create_teams.html",games = games,users = users)
+    if request.method == "POST":
+        team_name = request.form["team_name"]
+        game_id = request.form["game_id"]
+        team_captain_id = request.form["team_captain_id"]
+        team = Teams(None,team_name,game_id,team_captain_id)
+        team.create_team()
+    return render_template("create_teams.html")
+
+@app.route("/update_teams",methods = ["GET","POST"])
+@login_required
+@admin_required
+def update_teams():
+    if request.method == "GET":
+        games = Fetch_data.fetch_games(None)
+        users = Fetch_data.fetch_users(None)
+        teams = Fetch_data.fetch_teams(None)
+        return render_template("update_teams.html",teams = teams,games = games,users = users)
+    if request.method == "POST":
+        team_id = request.form["team_id"]
+        team_name = request.form["team_name"]
+        game_id = request.form["game_id"]
+        team_captain_id = request.form["team_captain_id"]
+        team = Teams(team_id,team_name,game_id,team_captain_id)
+        team.update_team()
+        print(team_name,game_id,team_captain_id,team_id)
+        print("Team Updated")
+    return render_template("update_teams.html")
+
+@app.route("/delete_teams",methods = ["GET","POST"])
+@login_required
+@admin_required
+def delete_teams():
+    if request.method  == "GET":
+        teams = Fetch_data.fetch_teams(None)
+        return render_template('delete_teams.html',teams = teams)
+    if request.method == "POST":
+        team_id = request.form["team_id"]
+        delete = Teams(team_id,None,None,None)
+        delete.delete_team()
+        return render_template('delete_teams.html')
+
 @app.route("/leader_board",methods = ["GET","POST"])
 @login_required
 def leader_board():
