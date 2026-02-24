@@ -1,50 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Delete Tournaments</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="page-wrapper">
-        <div class="page-header">
-            <h2>Delete <span>Tournaments</span></h2>
-            <span class="count-badge">{{ tournaments|length }} entries</span>
-        </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Game</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for tournament in tournaments %}
-                    <tr>
-                        <td>#{{ tournament.tournament_id }}</td>
-                        <td>{{ tournament.name }}</td>
-                        <td>{{ tournament.game_id }}</td>
-                        <td>{{ tournament.start_date }}</td>
-                        <td>{{ tournament.end_date }}</td>
-                        <td><span class="badge badge-{{ tournament.status }}">{{ tournament.status }}</span></td>
-                        <td>
-                            <form action="/delete_tournaments" method="POST">
-                                <input type="hidden" name="tournament_id" value="{{ tournament.tournament_id }}">
-                                <button type="submit" class="btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+{% extends "base.html" %}
+{% block title %}Delete Tournament{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-trash"></i> Delete Tournament</h1>
+  <a href="{{ url_for('list_tournaments') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+<div class="card">
+  <div class="card-header bg-danger text-white">
+    <h5 class="mb-0"><i class="bi bi-trophy"></i> All Tournaments <span class="badge bg-dark ms-2">{{ tournaments|length }}</span></h5>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th style="width:80px">ID</th>
+            <th>Tournament Name</th>
+            <th>Game</th>
+            <th>Start Date</th>
+            <th>Status</th>
+            <th class="text-center" style="width:120px">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in tournaments %}
+          <tr>
+            <td><span class="badge bg-secondary">#{{ t.tournament_id }}</span></td>
+            <td><strong>{{ t.name }}</strong></td>
+            <td>{{ t.game_name }}</td>
+            <td>{{ t.start_date or '—' }}</td>
+            <td>
+              <span class="badge {% if t.status == 'upcoming' %}bg-info{% elif t.status == 'ongoing' %}bg-success{% elif t.status == 'completed' %}bg-dark{% else %}bg-secondary{% endif %}">
+                {{ t.status }}
+              </span>
+            </td>
+            <td class="text-center">
+              <form method="POST" action="{{ url_for('delete_tournament') }}"
+                    onsubmit="return confirm('Delete {{ t.name }}?')">
+                <input type="hidden" name="tournament_id" value="{{ t.tournament_id }}">
+                <button type="submit" class="btn btn-danger btn-sm">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

@@ -1,42 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — teams</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="page-wrapper">
-        <div class="page-header">
-            <h2><span>⬡</span> teams</h2>
-            <span class="count-badge">{{ teams|length }} teams</span>
+{% extends "base.html" %}
+{% block title %}Teams - Esports Tournament Manager{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-people"></i> Teams</h1>
+  {% if session.get("user_id") %}
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('user_teams') }}" class="btn btn-info"><i class="bi bi-person-lines-fill"></i> My Teams</a>
+    <a href="{{ url_for('create_teams') }}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Team</a>
+    <a href="{{ url_for('join_teams') }}" class="btn btn-success"><i class="bi bi-person-plus"></i> Join Team</a>
+  </div>
+  {% endif %}
+</div>
+
+{% if teams %}
+<div class="row">
+  {% for team in teams %}
+  <div class="col-md-6 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div>
+            <h5 class="card-title mb-1">{{ team.team_name }}</h5>
+            <p class="text-muted mb-1"><i class="bi bi-joystick"></i> {{ team.game_name }}</p>
+          </div>
+          <span class="badge bg-primary rounded-pill">#{{ team.team_id }}</span>
         </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Game_ID</th>
-                        <th>Game</th>
-                        <th>Captain</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for team in teams %}
-                    <tr>
-                        <td>#{{team.team_id }}</td>
-                        <td>{{ team.team_name}}</td> 
-                        <td>{{ team.game_id}}</td>
-                        <td>{{ team.game_name }}</td>
-                        <td>{{ team.user_name }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <small class="text-muted">
+          <i class="bi bi-star-fill text-warning"></i> Captain: {{ team.user_name }}
+        </small>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center">
+  <i class="bi bi-info-circle"></i> No teams available yet.
+  {% if session.get("user_id") %}
+  <a href="{{ url_for('create_teams') }}" class="alert-link">Create the first team</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

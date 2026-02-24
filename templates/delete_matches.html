@@ -1,50 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Delete Matches</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="page-wrapper">
-        <div class="page-header">
-            <h2>Delete <span>Matches</span></h2>
-            <span class="count-badge">{{ matches|length }} entries</span>
-        </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tournament</th>
-                        <th>Match #</th>
-                        <th>Round</th>
-                        <th>Scheduled At</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for match in matches %}
-                    <tr>
-                        <td>#{{ match.match_id }}</td>
-                        <td>{{ match.tournament_id }}</td>
-                        <td>{{ match.match_no }}</td>
-                        <td>{{ match.round_no }}</td>
-                        <td>{{ match.scheduled_at }}</td>
-                        <td><span class="badge badge-{{ match.status }}">{{ match.status }}</span></td>
-                        <td>
-                            <form action="/delete_matches" method="POST">
-                                <input type="hidden" name="match_id" value="{{ match.match_id }}">
-                                <button type="submit" class="btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+{% extends "base.html" %}
+{% block title %}Delete Match{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-trash"></i> Delete Match</h1>
+  <a href="{{ url_for('list_matches') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+<div class="card">
+  <div class="card-header bg-danger text-white">
+    <h5 class="mb-0"><i class="bi bi-calendar-event"></i> All Matches <span class="badge bg-dark ms-2">{{ matches|length }}</span></h5>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Tournament</th>
+            <th>Match #</th>
+            <th>Round</th>
+            <th>Scheduled At</th>
+            <th>Status</th>
+            <th class="text-center" style="width:120px">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for match in matches %}
+          <tr>
+            <td><span class="badge bg-secondary">#{{ match.match_id }}</span></td>
+            <td><strong>{{ match.tournament_id }}</strong></td>
+            <td>{{ match.match_no }}</td>
+            <td>Round {{ match.round_no }}</td>
+            <td>{{ match.scheduled_at or '—' }}</td>
+            <td>
+              <span class="badge 
+                {% if match.status == 'scheduled' %}bg-info
+                {% elif match.status == 'ongoing' %}bg-warning
+                {% elif match.status == 'completed' %}bg-success
+                {% else %}bg-secondary{% endif %}">
+                {{ match.status }}
+              </span>
+            </td>
+            <td class="text-center">
+              <form method="POST" action="{{ url_for('delete_match') }}"
+                    onsubmit="return confirm('Delete Match #{{ match.match_no }}?')">
+                <input type="hidden" name="match_id" value="{{ match.match_id }}">
+                <button type="submit" class="btn btn-danger btn-sm">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

@@ -368,7 +368,7 @@ class Fetch_data():
     def fetch_tournaments(self):
         lists = Tournaments(None,None, None,None,None,None)
         tournaments = lists.list_tournaments()
-        return tournaments
+        return [dict(row) for row in tournaments]
     
     def fetch_matches(self):
         matches = Matches.list_matches(None)

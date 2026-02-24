@@ -1,49 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Update Tournament</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="form-box-wrapper">
-        <div class="form-box">
-            <h2>Update Tournament</h2>
-            <form action="/update_tournaments" method="POST">
-                <label for="tournament_id">Select Tournament</label>
-                <select id="tournament_id" name="tournament_id" required>
-                    {% for tournament in tournaments %}
-                        <option value="{{ tournament.tournament_id }}">{{ tournament.name }}</option>
-                    {% endfor %}
-                </select>
-
-                <label for="name">New Name</label>
-                <input type="text" id="name" name="name" placeholder="Tournament name" required>
-
-                <label for="game_id">Game</label>
-                <select id="game_id" name="game_id" required>
-                    {% for game in games %}
-                        <option value="{{ game.game_id }}">{{ game.game_name }}</option>
-                    {% endfor %}
-                </select>
-
-                <label for="start_date">Start Date</label>
-                <input type="date" id="start_date" name="start_date" required>
-
-                <label for="end_date">End Date</label>
-                <input type="date" id="end_date" name="end_date" required>
-
-                <label for="status">Status</label>
-                <select id="status" name="status" required>
-                    <option value="upcoming">Upcoming</option>
-                    <option value="ongoing">Ongoing</option>
-                    <option value="completed">Completed</option>
-                </select>
-
-                <button type="submit">Update Tournament</button>
-            </form>
-        </div>
+{% extends "base.html" %}
+{% block title %}Update Tournament{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-pencil"></i> Update Tournament</h1>
+  <a href="{{ url_for('list_tournaments') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="bi bi-trophy"></i> Edit Tournament Details</h5>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('update_tournaments') }}">
+          <div class="mb-3">
+            <label class="form-label">Select Tournament</label>
+            <select class="form-select" name="tournament_id" required>
+              <option value="">Choose a tournament...</option>
+              {% for t in tournaments %}
+              <option value="{{ t.tournament_id }}">{{ t.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">New Tournament Name</label>
+            <input type="text" class="form-control" name="tournament_name" placeholder="Tournament name" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Select Game</label>
+            <select class="form-select" name="game_id" required>
+              <option value="">Choose a game...</option>
+              {% for game in games %}
+              <option value="{{ game.game_id }}">{{ game.game_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Start Date</label>
+                <input type="date" class="form-control" name="start_date">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">End Date</label>
+                <input type="date" class="form-control" name="end_date">
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status" required>
+              <option value="upcoming">Upcoming</option>
+              <option value="ongoing">Ongoing</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Update</button>
+            <a href="{{ url_for('list_tournaments') }}" class="btn btn-secondary"><i class="bi bi-x-circle"></i> Cancel</a>
+          </div>
+        </form>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

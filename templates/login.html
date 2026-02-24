@@ -1,36 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="form-wrapper">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <ul class="flashes" style="position:absolute;top:20px;left:50%;transform:translateX(-50%);width:90%;max-width:420px;">
-              {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-
-        <div class="form-container">
-            <h2>Login</h2>
-            <form method="POST">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="you@example.com" required>
-
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
-
-                <button type="submit">Sign In</button>
-            </form>
-            <p class="auth-link">No account? <a href="/register">Register here</a></p>
-        </div>
+{% extends "base.html" %}
+{% block title %}Login - Esports Tournament Manager{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow">
+      <div class="card-body p-5">
+        <h2 class="card-title text-center mb-4">
+          <i class="bi bi-box-arrow-in-right"></i> Login
+        </h2>
+        <form method="POST" action="{{ url_for('login') }}">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-unlock"></i> Login
+          </button>
+        </form>
+        <hr class="my-4">
+        <p class="text-center mb-0">
+          Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
+        </p>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

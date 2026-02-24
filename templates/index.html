@@ -1,104 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <nav class="navbar">
-        <a href="/">Home</a>
-        <a href="/list_games">Games</a>
-        <a href="/teams">Teams</a>
-        <a href="/list_tournaments">Tournaments</a>
-        <a href="/leader_board">Leaderboard</a>
-        {% if session.get("user_id") %}
-            <a href="/logout">Logout</a>
-        {% else %}
-            <a href="/register">Register</a>
-            <a href="/login">Login</a>
-        {% endif %}
-    </nav>
+{% extends "base.html" %}
+{% block title %}Dashboard - Esports Tournament Manager{% endblock %}
+{% block content %}
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul class="flashes">
-          {% for category, message in messages %}
-            <li class="{{ category }}">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+<h1 class="mb-4">
+  <i class="bi bi-speedometer2"></i> Dashboard
+  {% if session.get("user_role") == "admin" %}
+    <span class="badge bg-danger ms-2">Admin</span>
+  {% endif %}
+</h1>
 
-    <div class="dashboard">
-        {% if session.get("user_id") %}
-            <h1>Welcome, <span>{{ session.get("user_name") }}</span></h1>
-            <p>Select a section below to get started.</p>
-
-            {% if session.get("user_role") == "admin" %}
-                <div class="card-group">
-                    <div class="card">
-                        <h2>Games</h2>
-                        <a href="/add_games">Add Game</a>
-                        <a href="/list_games">List Games</a>
-                        <a href="/update_games">Update Game</a>
-                        <a href="/delete_games">Delete Game</a>
-                    </div>
-                    <div class="card">
-                        <h2>Tournaments</h2>
-                        <a href="/create_tournaments">Create Tournament</a>
-                        <a href="/list_tournaments">List Tournaments</a>
-                        <a href="/update_tournaments">Update Tournament</a>
-                        <a href="/delete_tournaments">Delete Tournament</a>
-                    </div>
-                    <div class="card">
-                        <h2>Matches</h2>
-                        <a href="/create_matches">Create Match</a>
-                        <a href="/list_matches">List Matches</a>
-                        <a href="/update_matches">Update Match</a>
-                        <a href="/delete_matches">Delete Match</a>
-                    </div>
-                    
-                    <div class="card">
-                        <h2>Teams</h2>
-                        <a href="/create_teams">Create Team</a>
-                        <a href="/list_teams">List Teams</a>
-                        <a href="/update_teams">Update Team</a>
-                        <a href="/delete_teams">Delete Team</a>
-                    </div>
-                    
-                    <div class="card">
-                        <h2>Leaderboard</h2>
-                        <a href="/leader_board">View Leaderboard</a>
-                    </div>
-                </div>
-            {% else %}
-                <div class="card-group">
-                    <div class="card">
-                        <h2>Teams</h2>
-                        <a href="/create_teams">Create Team</a>
-                        <a href="/join_teams">Join Team</a>
-                        <a href="/user_teams">My Teams</a>
-                    </div>
-                    <div class="card">
-                        <h2>Games</h2>
-                        <a href="/list_games">View Games</a>
-                    </div>
-                    <div class="card">
-                        <h2>Tournaments</h2>
-                        <a href="/list_tournaments">View Tournaments</a>
-                    </div>
-                    <div class="card">
-                        <h2>Leaderboard</h2>
-                        <a href="/leader_board">View Leaderboard</a>
-                    </div>
-                </div>
-            {% endif %}
-        {% else %}
-            <h1>Welcome to <span>Arena</span></h1>
-            <p>Please <a href="/login">login</a> or <a href="/register">register</a> to continue.</p>
-        {% endif %}
+<div class="row">
+  <!-- My Teams -->
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-people"></i> My Teams</h5>
+      </div>
+      <div class="card-body">
+        <p class="text-muted mb-3">View and manage the teams you have joined.</p>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="{{ url_for('user_teams') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-people-fill"></i> My Teams
+          </a>
+          <a href="{{ url_for('join_teams') }}" class="btn btn-success btn-sm">
+            <i class="bi bi-person-plus"></i> Join a Team
+          </a>
+          <a href="{{ url_for('create_teams') }}" class="btn btn-dark btn-sm">
+            <i class="bi bi-plus-circle"></i> Create Team
+          </a>
+        </div>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+
+  <!-- Tournaments -->
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0"><i class="bi bi-trophy"></i> Tournaments</h5>
+      </div>
+      <div class="card-body">
+        <p class="text-muted mb-3">Browse active and upcoming tournaments.</p>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="{{ url_for('list_tournaments') }}" class="btn btn-warning btn-sm">
+            <i class="bi bi-trophy-fill"></i> View Tournaments
+          </a>
+          {% if session.get("user_role") == "admin" %}
+          <a href="{{ url_for('create_tournament') }}" class="btn btn-dark btn-sm">
+            <i class="bi bi-plus-circle"></i> Create
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-list-check"></i> Quick Actions</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-6 col-md-3">
+            <a href="{{ url_for('create_teams') }}" class="btn btn-outline-primary w-100 mb-2">
+              <i class="bi bi-plus-circle"></i><br>Create Team
+            </a>
+          </div>
+          <div class="col-6 col-md-3">
+            <a href="{{ url_for('join_teams') }}" class="btn btn-outline-success w-100 mb-2">
+              <i class="bi bi-person-plus"></i><br>Join Team
+            </a>
+          </div>
+          <div class="col-6 col-md-3">
+            <a href="{{ url_for('list_tournaments') }}" class="btn btn-outline-warning w-100 mb-2">
+              <i class="bi bi-trophy"></i><br>Tournaments
+            </a>
+          </div>
+          <div class="col-6 col-md-3">
+            <a href="{{ url_for('leader_board') }}" class="btn btn-outline-danger w-100 mb-2">
+              <i class="bi bi-bar-chart"></i><br>Leaderboard
+            </a>
+          </div>
+        </div>
+
+        {% if session.get("user_role") == "admin" %}
+        <hr>
+        <h6 class="text-danger fw-bold mb-3"><i class="bi bi-shield-lock"></i> Admin Actions</h6>
+
+        <p class="text-muted fw-semibold small text-uppercase mb-2" style="letter-spacing:.6px"><i class="bi bi-joystick"></i> Games</p>
+        <div class="row g-2 mb-3">
+          <div class="col-6 col-md-3"><a href="{{ url_for('add_games') }}" class="btn btn-outline-danger w-100"><i class="bi bi-plus-circle"></i><br>Add Game</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('list_games') }}" class="btn btn-outline-danger w-100"><i class="bi bi-list-ul"></i><br>List Games</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('update_games') }}" class="btn btn-outline-danger w-100"><i class="bi bi-pencil"></i><br>Update</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('delete_games') }}" class="btn btn-outline-danger w-100"><i class="bi bi-trash"></i><br>Delete</a></div>
+        </div>
+
+        <p class="text-muted fw-semibold small text-uppercase mb-2" style="letter-spacing:.6px"><i class="bi bi-trophy"></i> Tournaments</p>
+        <div class="row g-2 mb-3">
+          <div class="col-6 col-md-3"><a href="{{ url_for('create_tournament') }}" class="btn btn-outline-danger w-100"><i class="bi bi-plus-circle"></i><br>Create</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('list_tournaments') }}" class="btn btn-outline-danger w-100"><i class="bi bi-list-ul"></i><br>List</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('update_tournaments') }}" class="btn btn-outline-danger w-100"><i class="bi bi-pencil"></i><br>Update</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('delete_tournament') }}" class="btn btn-outline-danger w-100"><i class="bi bi-trash"></i><br>Delete</a></div>
+        </div>
+
+        <p class="text-muted fw-semibold small text-uppercase mb-2" style="letter-spacing:.6px"><i class="bi bi-calendar-event"></i> Matches</p>
+        <div class="row g-2 mb-3">
+          <div class="col-6 col-md-3"><a href="{{ url_for('create_match') }}" class="btn btn-outline-danger w-100"><i class="bi bi-plus-circle"></i><br>Create</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('list_matches') }}" class="btn btn-outline-danger w-100"><i class="bi bi-list-ul"></i><br>List</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('update_match') }}" class="btn btn-outline-danger w-100"><i class="bi bi-pencil"></i><br>Update</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('delete_match') }}" class="btn btn-outline-danger w-100"><i class="bi bi-trash"></i><br>Delete</a></div>
+        </div>
+
+        <p class="text-muted fw-semibold small text-uppercase mb-2" style="letter-spacing:.6px"><i class="bi bi-people"></i> Teams</p>
+        <div class="row g-2">
+          <div class="col-6 col-md-3"><a href="{{ url_for('create_teams') }}" class="btn btn-outline-danger w-100"><i class="bi bi-plus-circle"></i><br>Create</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('list_teams') }}" class="btn btn-outline-danger w-100"><i class="bi bi-list-ul"></i><br>List</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('update_teams') }}" class="btn btn-outline-danger w-100"><i class="bi bi-pencil"></i><br>Update</a></div>
+          <div class="col-6 col-md-3"><a href="{{ url_for('delete_teams') }}" class="btn btn-outline-danger w-100"><i class="bi bi-trash"></i><br>Delete</a></div>
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

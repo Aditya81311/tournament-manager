@@ -1,45 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Tournaments</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="page-wrapper">
-        <div class="page-header">
-            <h2><span>⬡</span> Tournaments</h2>
-            <span class="count-badge">{{ tournaments|length }} events</span>
+{% extends "base.html" %}
+{% block title %}Tournaments - Esports Tournament Manager{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-trophy"></i> Tournaments</h1>
+  {% if session.get("user_role") == "admin" %}
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('create_tournament') }}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Tournament</a>
+    <a href="{{ url_for('update_tournaments') }}" class="btn btn-info"><i class="bi bi-pencil"></i> Edit</a>
+    <a href="{{ url_for('delete_tournament') }}" class="btn btn-danger"><i class="bi bi-trash"></i> Delete</a>
+  </div>
+  {% endif %}
+</div>
+
+{% if tournaments %}
+<div class="row">
+  {% for tournament in tournaments %}
+  <div class="col-md-12 mb-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5 class="card-title mb-2">
+              <i class="bi bi-trophy-fill text-warning"></i> {{ tournament.name }}
+            </h5>
+            <p class="mb-2">
+              <span class="badge bg-secondary">{{ tournament.game_name }}</span>
+              <span class="badge {% if tournament.status == 'upcoming' %}bg-info{% elif tournament.status == 'ongoing' %}bg-success{% elif tournament.status == 'completed' %}bg-dark{% else %}bg-secondary{% endif %}">
+                {{ tournament.status }}
+              </span>
+            </p>
+            {% if tournament.start_date %}
+            <p class="text-muted mb-0">
+              <i class="bi bi-calendar"></i> {{ tournament.start_date }}
+              {% if tournament.end_date %} – {{ tournament.end_date }}{% endif %}
+            </p>
+            {% endif %}
+          </div>
+          <div class="col-md-4 text-end">
+            <a href="{{ url_for('list_matches') }}" class="btn btn-primary">
+              <i class="bi bi-eye"></i> View Matches
+            </a>
+          </div>
         </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Game</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for tournament in tournaments %}
-                    <tr>
-                        <td>#{{ tournament.tournament_id }}</td>
-                        <td>{{ tournament.name }}</td>
-                        <td>{{ tournament.game_id }}</td>
-                        <td>{{ tournament.start_date }}</td>
-                        <td>{{ tournament.end_date }}</td>
-                        <td>
-                            <span class="badge badge-{{ tournament.status }}">{{ tournament.status }}</span>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center">
+  <i class="bi bi-info-circle"></i> No tournaments available yet.
+  {% if session.get("user_role") == "admin" %}
+  <a href="{{ url_for('create_tournament') }}" class="alert-link">Create the first tournament</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

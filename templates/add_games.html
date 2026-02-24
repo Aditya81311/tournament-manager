@@ -1,25 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Add Game</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="form-box-wrapper">
-        <div class="form-box">
-            <h2>Add Game</h2>
-            <form action="{{ url_for('add_games') }}" method="POST">
-                <label for="game_name">Game Name</label>
-                <input type="text" id="game_name" name="game_name" placeholder="e.g. Valorant" required>
-
-                <label for="game_genre">Genre</label>
-                <input type="text" id="game_genre" name="game_genre" placeholder="e.g. FPS, MOBA, RTS" required>
-
-                <button type="submit">Add Game</button>
-            </form>
-        </div>
+{% extends "base.html" %}
+{% block title %}Add Game{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-plus-circle"></i> Add New Game</h1>
+  <a href="{{ url_for('list_games') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-joystick"></i> Game Details</h5>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('add_games') }}">
+          <div class="mb-3">
+            <label for="game_name" class="form-label">Game Name</label>
+            <input type="text" class="form-control" id="game_name" name="game_name" placeholder="e.g. Valorant" required>
+          </div>
+          <div class="mb-3">
+            <label for="game_genre" class="form-label">Genre</label>
+            <input type="text" class="form-control" id="game_genre" name="game_genre" placeholder="e.g. FPS, MOBA, RTS" required>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Add Game</button>
+            <a href="{{ url_for('list_games') }}" class="btn btn-secondary"><i class="bi bi-x-circle"></i> Cancel</a>
+          </div>
+        </form>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

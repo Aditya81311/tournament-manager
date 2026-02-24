@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Home - Esports Tournament Manager{% endblock %}
+{% block content %}
+
+<div class="hero-section text-center py-5 bg-light rounded">
+  <h1 class="display-4 mb-4">
+    <i class="bi bi-trophy-fill text-warning"></i>
+    Welcome to Esports Tournament Manager
+  </h1>
+  <p class="lead mb-4">Manage teams, organize tournaments, and track your competitive gaming journey</p>
+
+  {% if not session.get("user_id") %}
+  <div class="d-flex justify-content-center gap-3">
+    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+      <i class="bi bi-person-plus"></i> Get Started
+    </a>
+    <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">
+      <i class="bi bi-box-arrow-in-right"></i> Login
+    </a>
+  </div>
+  {% else %}
+  <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">
+    <i class="bi bi-speedometer2"></i> Go to Dashboard
+  </a>
+  {% endif %}
+</div>
+
+<div class="row mt-5">
+  <div class="col-md-3">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <i class="bi bi-joystick display-1 text-primary"></i>
+        <h5 class="card-title mt-3">Multiple Games</h5>
+        <p class="card-text">Support for various esports titles including Valorant, League of Legends, CS2, and more</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <i class="bi bi-people display-1 text-success"></i>
+        <h5 class="card-title mt-3">Team Management</h5>
+        <p class="card-text">Create teams, recruit players, and build your competitive roster</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <i class="bi bi-trophy display-1 text-warning"></i>
+        <h5 class="card-title mt-3">Tournaments</h5>
+        <p class="card-text">Participate in organized tournaments and compete for glory</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <i class="bi bi-bar-chart display-1 text-danger"></i>
+        <h5 class="card-title mt-3">Leaderboards</h5>
+        <p class="card-text">Track team performance and climb the competitive rankings</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-md-12"><h2 class="text-center mb-4">How It Works</h2></div>
+  <div class="col-md-4">
+    <div class="text-center">
+      <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center"
+           style="width:60px;height:60px;font-size:24px;font-weight:bold;">1</div>
+      <h5 class="mt-3">Create an Account</h5>
+      <p>Sign up and create your player profile</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="text-center">
+      <div class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center"
+           style="width:60px;height:60px;font-size:24px;font-weight:bold;">2</div>
+      <h5 class="mt-3">Join or Create a Team</h5>
+      <p>Form your team or join existing ones</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="text-center">
+      <div class="rounded-circle bg-warning text-white d-inline-flex align-items-center justify-content-center"
+           style="width:60px;height:60px;font-size:24px;font-weight:bold;">3</div>
+      <h5 class="mt-3">Compete &amp; Win</h5>
+      <p>Participate in tournaments and climb the leaderboard</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

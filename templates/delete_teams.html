@@ -1,47 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Delete Teams</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="page-wrapper">
-        <div class="page-header">
-            <h2>Delete <span>Teams</span></h2>
-            <span class="count-badge">{{ teamss|length }} entries</span>
-        </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Team Name</th>
-                        <th>Game ID #</th>
-                        <th>Game Name</th>
-                        <th>Captain At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for team in teams %}
-                    <tr>
-                         <td>#{{team.team_id }}</td>
-                        <td>{{ team.team_name}}</td> 
-                        <td>{{ team.game_id}}</td>
-                        <td>{{ team.game_name }}</td>
-                        <td>{{ team.user_name }}</td>
-                        <td>
-                            <form action="/delete_teams" method="POST">
-                                <input type="hidden" name="team_id" value="{{ team.team_id }}">
-                                <button type="submit" class="btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+{% extends "base.html" %}
+{% block title %}Delete Team{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-trash"></i> Delete Team</h1>
+  <a href="{{ url_for('list_teams') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+<div class="card">
+  <div class="card-header bg-danger text-white">
+    <h5 class="mb-0"><i class="bi bi-people"></i> All Teams <span class="badge bg-dark ms-2">{{ teams|length }}</span></h5>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th style="width:80px">ID</th>
+            <th>Team Name</th>
+            <th>Game</th>
+            <th>Captain</th>
+            <th class="text-center" style="width:120px">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for team in teams %}
+          <tr>
+            <td><span class="badge bg-secondary">#{{ team.team_id }}</span></td>
+            <td><strong>{{ team.team_name }}</strong></td>
+            <td>{{ team.game_name }}</td>
+            <td>{{ team.user_name }}</td>
+            <td class="text-center">
+              <form method="POST" action="{{ url_for('delete_teams') }}"
+                    onsubmit="return confirm('Delete {{ team.team_name }}?')">
+                <input type="hidden" name="team_id" value="{{ team.team_id }}">
+                <button type="submit" class="btn btn-danger btn-sm">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

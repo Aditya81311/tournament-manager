@@ -1,41 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Create Admin</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="form-wrapper">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <ul class="flashes" style="position:absolute;top:20px;left:50%;transform:translateX(-50%);width:90%;max-width:420px;">
-              {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-
-        <div class="form-container">
-            <h2>Create Admin</h2>
-            <form method="POST">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" placeholder="Admin name" required>
-
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="admin@example.com" required>
-
-                <label for="phone">Phone</label>
-                <input type="text" id="phone" name="phone" placeholder="+1 234 567 8900">
-
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
-
-                <button type="submit">Create Admin</button>
-            </form>
-        </div>
+{% extends "base.html" %}
+{% block title %}Create Admin{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header bg-danger text-white">
+        <h4 class="mb-0"><i class="bi bi-shield-lock"></i> Create Admin Account</h4>
+      </div>
+      <div class="card-body p-4">
+        <form method="POST" action="{{ url_for('create_admin') }}">
+          <div class="mb-3">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Admin name" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="admin@example.com" required>
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="+91 000 000 0000">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-danger w-100">
+            <i class="bi bi-shield-check"></i> Create Admin
+          </button>
+        </form>
+        <hr class="my-4">
+        <p class="text-center mb-0"><a href="{{ url_for('login') }}">← Back to Login</a></p>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

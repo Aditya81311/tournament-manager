@@ -1,44 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena — Delete Games</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="page-wrapper">
-        <div class="page-header">
-            <h2>Delete <span>Games</span></h2>
-            <span class="count-badge">{{ games|length }} entries</span>
-        </div>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Game Name</th>
-                        <th>Genre</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for game in games %}
-                    <tr>
-                        <td>#{{ game.game_id }}</td>
-                        <td>{{ game.game_name }}</td>
-                        <td>{{ game.game_genre }}</td>
-                        <td>
-                            <form action="/delete_games" method="POST">
-                                <input type="hidden" name="game_id" value="{{ game.game_id }}">
-                                <button type="submit" class="btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+{% extends "base.html" %}
+{% block title %}Delete Game{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><i class="bi bi-trash"></i> Delete Game</h1>
+  <a href="{{ url_for('list_games') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+<div class="card">
+  <div class="card-header bg-danger text-white">
+    <h5 class="mb-0"><i class="bi bi-joystick"></i> All Games <span class="badge bg-dark ms-2">{{ games|length }}</span></h5>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th style="width:80px">ID</th>
+            <th>Game Name</th>
+            <th>Genre</th>
+            <th class="text-center" style="width:120px">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for game in games %}
+          <tr>
+            <td><span class="badge bg-secondary">#{{ game.game_id }}</span></td>
+            <td><strong>{{ game.game_name }}</strong></td>
+            <td>{{ game.game_genre }}</td>
+            <td class="text-center">
+              <form method="POST" action="{{ url_for('delete_games') }}"
+                    onsubmit="return confirm('Delete {{ game.game_name }}? This cannot be undone.')">
+                <input type="hidden" name="game_id" value="{{ game.game_id }}">
+                <button type="submit" class="btn btn-danger btn-sm">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}
