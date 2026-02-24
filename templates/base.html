@@ -28,7 +28,7 @@
       </ul>
       <ul class="navbar-nav">
         {% if session.get("user_id") %}
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('user_teams') }}"><i class="bi bi-person-circle"></i> {{ session.get("user_name","") }}</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
         {% else %}
