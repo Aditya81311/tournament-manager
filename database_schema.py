@@ -82,14 +82,14 @@ class Data_base():
         print("Matches Table Crated ")
     def scores_table(self):
         cur.execute('''
-        CREATE TABLE IF NOT EXISTS scores (
-            match_id INTEGER PRIMARY KEY ,
+        CREATE TABLE IF NOT EXISTS scores(
+            match_id INTEGER NOT NULL,
             tournament_id INTEGER NOT NULL,
-            match_no INTEGER NOT NULL,
-            round_no INTEGER NOT NULL,
             team_score_1 INTEGER NOT NULL,
             team_score_2 INTEGER NOT NULL,
             winner INTEGER,
+            FOREIGN KEY (match_id) REFERENCES matches(match_id),
+            FOREIGN KEY (winner) REFERENCES teams(team_id)
         )
         ''')
         print("Scores Table Crated ")
@@ -122,5 +122,6 @@ if __name__ == "__main__":
     create_tables.games_table()
     create_tables.tournament_table()
     create_tables.matches_table()
+    create_tables.scores_table()
     create_tables.leader_board_table()
     

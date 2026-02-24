@@ -1,5 +1,5 @@
 from flask import Flask, render_template , request , redirect, url_for, session, flash
-from main import Users, Teams,Games,Tournaments,Matches,Fetch_data , Join_Teams , User_teams
+from main import Users, Teams,Games,Tournaments,Matches,Fetch_data , Join_Teams , User_teams , Scores
 import sqlite3
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
@@ -302,25 +302,6 @@ def update_match():
         flash("Match Updated Successfully",'success')
         return redirect(url_for('update_match'))
 
-def add_scores():
-    if request.method == "GET":
-        tournaments = Fetch_data.fetch_tournaments(None)
-        matches = Fetch_data.fetch_matches(None)
-        teams = Fetch_data.fetch_teams(None)
-        return render_template('add_scores.html',tournaments = tournaments,matches = matches,teams = teams)
-    if request.method == "POST":
-        match_id = request.form["match_id"]
-        # match_no = request.form["match_no"]
-        team1_score = request.form["team1_score"]
-        team2_score = request.form["team2_score"]
-        winner_id = request.form["winner_id"]
-        status = request.form["status"]
-        create = Matches(match_id,team1_score, team2_score, winner_id, status)
-        create.add_scores()
-        flash("Scores Added Successfully",'success')
-        return redirect(url_for('add_scores'))
-
-
 @app.route('/delete_matches', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -334,6 +315,27 @@ def delete_match():
         delete.delete_match()
         flash("Match Deleted",'danger')
         return redirect(url_for('delete_match'))
+
+@app.route("/add_scores",methods = ["GET","POST"])
+@login_required
+@admin_required
+def add_scores():
+    if request.method == "GET":
+        tournaments = Fetch_data.fetch_tournaments(None)
+        matches = Fetch_data.fetch_matches(None)
+        teams = Fetch_data.fetch_teams(None)
+        return render_template('add_scores.html',tournaments = tournaments,matches = matches,teams = teams)
+    if request.method == "POST":
+        match_id = request.form["match_id"]
+        tournament_id = request.form["tournament_id"]
+        team1_score = request.form["team1_score"]
+        team2_score = request.form["team2_score"]
+        winner_id = request.form["winner_id"]
+        print("\n",match_id,tournament_id,team1_score, team2_score, winner_id)
+        create = Scores(match_id,tournament_id,team1_score, team2_score, winner_id)
+        create.add_score()
+        flash("Scores Added Successfully",'success')
+        return redirect(url_for('add_scores'))
 
 @app.route("/list_teams",methods = ["GET","POST"])
 @login_required

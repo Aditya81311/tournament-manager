@@ -309,6 +309,24 @@ class Matches():
         conn.commit()
         conn.close()
     
+class Scores:
+    def __init__(self,match_id,tournament_id,team1_score, team2_score, winner_id):
+        self.match_id = match_id
+        self.tournament_id = tournament_id
+        self.team1_score = team1_score
+        self.team2_score = team2_score
+        self.winner_id = winner_id
+
+    def add_score(self):
+        conn = get_db_connection()
+        curr = conn.cursor()
+        curr.execute('''
+        INSERT INTO scores(match_id,tournament_id,team_score_1, team_score_2, winner)
+        VALUES(?,?,?,?,?)
+        ''',(self.match_id,self.tournament_id,self.team1_score, self.team2_score, self.winner_id))
+        conn.commit()
+        conn.close()
+
 class Fetch_data():
     def __init__(self,user_id):
         self.user_id = user_id
