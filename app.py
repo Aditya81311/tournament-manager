@@ -278,7 +278,6 @@ def list_matches():
         matches = Fetch_data.fetch_matches(None)
     return render_template('list_matches.html',matches = matches)
 
-
 @app.route('/update_matches', methods=['GET', 'POST'])
 @login_required
 @admin_required
