@@ -12,11 +12,10 @@
       <div class="col-md-10">
         <label class="form-label fw-semibold">Filter by Tournament</label>
         <select class="form-select" name="tournament_id" onchange="this.form.submit()">
-          <option value="">All Tournaments (Overall Rankings)</option>
           {% for tournament in tournaments %}
-          <option value="{{ tournament.tournament_id }}"
-            {% if selected_tournament and selected_tournament|int == tournament.tournament_id %}selected{% endif %}>
-            {{ tournament.tournament_name }} — {{ tournament.start_date or 'TBD' }}
+          <option value="{{ tournament.tournament_id }}" {% if selected_tournament and
+            selected_tournament|int==tournament.tournament_id %}selected{% endif %}>
+            {{ tournament.name }} — {{ tournament.start_date or 'TBD' }}
           </option>
           {% endfor %}
         </select>
@@ -58,19 +57,21 @@
           <tr>
             <td>
               {% if loop.index == 1 %}
-                <span class="badge bg-warning" style="background:linear-gradient(135deg,#FFD700,#FFA500) !important;color:#000 !important;">
-                  <i class="bi bi-trophy-fill"></i> 1st
-                </span>
+              <span class="badge bg-warning"
+                style="background:linear-gradient(135deg,#FFD700,#FFA500) !important;color:#000 !important;">
+                <i class="bi bi-trophy-fill"></i> 1st
+              </span>
               {% elif loop.index == 2 %}
-                <span class="badge bg-secondary">
-                  <i class="bi bi-trophy"></i> 2nd
-                </span>
+              <span class="badge bg-secondary">
+                <i class="bi bi-trophy"></i> 2nd
+              </span>
               {% elif loop.index == 3 %}
-                <span class="badge" style="background:linear-gradient(135deg,#CD7F32,#a0522d) !important;color:#fff !important;">
-                  <i class="bi bi-trophy"></i> 3rd
-                </span>
+              <span class="badge"
+                style="background:linear-gradient(135deg,#CD7F32,#a0522d) !important;color:#fff !important;">
+                <i class="bi bi-trophy"></i> 3rd
+              </span>
               {% else %}
-                <span class="text-muted fw-bold">{{ loop.index }}</span>
+              <span class="text-muted fw-bold">{{ loop.index }}</span>
               {% endif %}
             </td>
             <td><strong>{{ entry.team_name }}</strong></td>
@@ -83,7 +84,8 @@
             <td class="text-center">{{ entry.score_against }}</td>
             <td class="text-center">
               {% set diff = entry.score_for - entry.score_against %}
-              <span class="badge {% if diff > 0 %}bg-success{% elif diff < 0 %}bg-danger{% else %}bg-secondary{% endif %}">
+              <span
+                class="badge {% if diff > 0 %}bg-success{% elif diff < 0 %}bg-danger{% else %}bg-secondary{% endif %}">
                 {% if diff > 0 %}+{% endif %}{{ diff }}
               </span>
             </td>

@@ -420,8 +420,17 @@ def user_teams():
 @login_required
 def leader_board():
     if request.method == "GET":
-        leaderboard = Fetch_data.fetch_leader_board(None)
-        return render_template("leader_board.html",leaderboard = leaderboard)
+        tournament_id = request.args.get("tournament_id", default=1, type=int)
+        data = Fetch_data(None,tournament_id)
+        leaderboard = data.fetch_leader_board()
+        tournaments = Fetch_data.fetch_tournaments(None)
+        return render_template("leader_board.html",leaderboard = leaderboard,tournaments=tournaments,selected_tournament = tournament_id)
+    if request.method == "POST":
+        tournament_id = request.form.get("tournament_id", type=int)
+        data = Fetch_data(None,tournament_id)
+        leaderboard = data.fetch_leader_board()
+        tournaments = Fetch_data.fetch_tournaments(None)
+        return render_template("leader_board.html",leaderboard = leaderboard,tournaments=tournaments,selected_tournament=tournament_id)
 
 if __name__ == "__main__":
     app.run(debug=True , host="0.0.0.0",port = 5000)

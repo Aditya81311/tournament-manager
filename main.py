@@ -328,8 +328,9 @@ class Scores:
         conn.close()
 
 class Fetch_data():
-    def __init__(self,user_id):
+    def __init__(self,user_id,tournament_id):
         self.user_id = user_id
+        self.tournament_id = tournament_id
 
     def fetch_users(self):
         conn = get_db_connection()
@@ -363,25 +364,50 @@ class Fetch_data():
         curr = conn.cursor()
         data = curr.execute('''
         SELECT 
-		    tm.team_id,
-		    tm.team_name,
-		    g.game_name,
-		    SUM(b.played) AS played,
-		    SUM(b.points) AS points,
-		    SUM(b.wins) AS wins ,
-		    SUM(b.score_for) AS score_for ,
-		    SUM(b.score_against) AS score_against ,
-		    b.updated	FROM leader_board b
- 	    LEFT JOIN tournaments t ON b.tournament_id = t.tournament_id
- 	    LEFT JOIN teams tm ON tm.team_id = b.team_id
- 	    LEFT JOIN matches m ON b.match_id = m.match_id
-	    LEFT JOIN games g ON t.game_id = g.game_id
-	    GROUP BY tm.team_id,
-		    tm.team_name,
-		    g.game_name,b.updated,b.points,
-		    b.score_for , b.score_against
-	    ORDER BY points DESC, (b.score_for - b.score_against) DESC
-            ''').fetchall()
+            t.tournament_id,
+            t.name AS tournament_name,
+            tm.team_id,
+            tm.team_name,
+            g.game_name,
+            COUNT(m.match_id) AS played,
+            SUM(
+                CASE WHEN s.winner = tm.team_id THEN 1 ELSE 0 END
+            ) AS wins,
+            SUM(
+                CASE WHEN s.winner IS NOT NULL AND s.winner != tm.team_id THEN 1 ELSE 0 END
+            ) AS losses,
+            SUM(
+                CASE WHEN tm.team_id = m.team_id_1 THEN s.team_score_1
+                     WHEN tm.team_id = m.team_id_2 THEN s.team_score_2
+                     ELSE 0 END
+            ) AS score_for,
+            SUM(
+                CASE WHEN tm.team_id = m.team_id_1 THEN s.team_score_2
+                     WHEN tm.team_id = m.team_id_2 THEN s.team_score_1
+                     ELSE 0 END
+            ) AS score_against,
+            SUM(
+                CASE WHEN s.winner = tm.team_id THEN 3 ELSE 0 END
+            ) AS points,   -- classic 3 points per win system
+            SUM(
+                CASE WHEN tm.team_id = m.team_id_1 THEN s.team_score_1
+                     WHEN tm.team_id = m.team_id_2 THEN s.team_score_2
+                     ELSE 0 END
+            ) -
+            SUM(
+                CASE WHEN tm.team_id = m.team_id_1 THEN s.team_score_2
+                     WHEN tm.team_id = m.team_id_2 THEN s.team_score_1
+                     ELSE 0 END
+            ) AS score_diff
+        FROM tournaments t
+            JOIN matches m ON t.tournament_id = m.tournament_id
+            JOIN scores s ON m.match_id = s.match_id
+            JOIN teams tm ON tm.team_id IN (m.team_id_1, m.team_id_2)
+            JOIN games g ON tm.game_id  = g.game_id
+            WHERE t.tournament_id = ?
+            GROUP BY t.tournament_id, t.name, tm.team_id, tm.team_name
+            ORDER BY points DESC, score_diff DESC;
+            ''',(self.tournament_id,)).fetchall()
         conn.commit()
         conn.close()
         return [dict(row) for row in data]
