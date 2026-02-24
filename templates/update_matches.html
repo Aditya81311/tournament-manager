@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Update Match{% endblock %}
 {% block content %}
+
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h1><i class="bi bi-pencil"></i> Update Match</h1>
-  <a href="{{ url_for('list_matches') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+  <a href="{{ url_for('list_matches') }}" class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> Back
+  </a>
 </div>
+
 <div class="row justify-content-center">
   <div class="col-md-7">
     <div class="card">
@@ -13,39 +17,76 @@
       </div>
       <div class="card-body">
         <form method="POST" action="{{ url_for('update_match') }}">
+
           <div class="mb-3">
             <label class="form-label">Select Match</label>
             <select class="form-select" name="match_id" required>
               <option value="">Choose a match...</option>
               {% for match in matches %}
-              <option value="{{ match.match_id }}">Match #{{ match.match_number }} — {{ match.tournament_name }}</option>
+              <option value="{{ match.match_id }}">
+                Match #{{ match.match_number }} — {{ match.tournament_name }}
+                ({{ match.team1_name }} vs {{ match.team2_name }})
+              </option>
               {% endfor %}
             </select>
           </div>
+
+          <div class="mb-3">
+            <label class="form-label">Tournament</label>
+            <select class="form-select" name="tournament_id" required>
+              <option value="">Choose a tournament...</option>
+              {% for t in tournaments %}
+              <option value="{{ t.tournament_id }}">{{ t.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
           <div class="row">
             <div class="col-md-6">
               <div class="mb-3">
-                <label class="form-label">Team 1 Score</label>
-                <input type="number" class="form-control" name="team1_score" min="0" placeholder="0">
+                <label class="form-label">Match Number</label>
+                <input type="number" class="form-control" name="match_no" min="1" placeholder="e.g. 1" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="mb-3">
-                <label class="form-label">Team 2 Score</label>
-                <input type="number" class="form-control" name="team2_score" min="0" placeholder="0">
+                <label class="form-label">Round Number</label>
+                <input type="number" class="form-control" name="round_no" min="1" placeholder="e.g. 1" required>
               </div>
             </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Winner</label>
-            <select class="form-select" name="winner_id">
-              <option value="">No winner yet / Draw</option>
-              {% for team in teams %}
-              <option value="{{ team.team_id }}">{{ team.team_name }}</option>
-              {% endfor %}
-            </select>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Team 1</label>
+                <select class="form-select" name="team1_id" required>
+                  <option value="">Choose team 1...</option>
+                  {% for team in teams %}
+                  <option value="{{ team.team_id }}">{{ team.team_name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Team 2</label>
+                <select class="form-select" name="team2_id" required>
+                  <option value="">Choose team 2...</option>
+                  {% for team in teams %}
+                  <option value="{{ team.team_id }}">{{ team.team_name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
           </div>
+
           <div class="mb-3">
+            <label class="form-label">Match Date </label>
+            <input type="date" class="form-control" name="scheduled_at">
+          </div>
+
+          <div class="mb-4">
             <label class="form-label">Status</label>
             <select class="form-select" name="status" required>
               <option value="scheduled">Scheduled</option>
@@ -53,13 +94,20 @@
               <option value="completed">Completed</option>
             </select>
           </div>
+
           <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Update Match</button>
-            <a href="{{ url_for('list_matches') }}" class="btn btn-secondary"><i class="bi bi-x-circle"></i> Cancel</a>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-circle"></i> Update Match
+            </button>
+            <a href="{{ url_for('list_matches') }}" class="btn btn-secondary">
+              <i class="bi bi-x-circle"></i> Cancel
+            </a>
           </div>
+
         </form>
       </div>
     </div>
   </div>
 </div>
+
 {% endblock %}

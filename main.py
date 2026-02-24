@@ -247,11 +247,13 @@ class Tournaments():
         conn.close()
 
 class Matches():
-    def __init__(self, match_id, tournament_id, match_no, round_no, scheduled_at, status):
+    def __init__(self, match_id, tournament_id, match_no, round_no, team_id_1,team_id_2,scheduled_at, status):
         self.match_id = match_id
         self.tournament_id = tournament_id
         self.match_no = match_no
         self.round_no = round_no 
+        self.team_id_1 = team_id_1
+        self.team_id_2 = team_id_2
         self.scheduled_at = scheduled_at
         self.status = status
         
@@ -259,9 +261,9 @@ class Matches():
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute('''
-        INSERT INTO matches(tournament_id, match_no, round_no, scheduled_at, status)
-        VALUES(?,?,?,?,?)
-        ''', (self.tournament_id, self.match_no, self.round_no, self.scheduled_at, self.status))
+        INSERT INTO matches(tournament_id, match_no, round_no,team_id_1,team_id_2, scheduled_at, status)
+        VALUES(?,?,?,?,?,?,?)
+        ''', (self.tournament_id, self.match_no, self.round_no,self.team_id_1,self.team_id_2, self.scheduled_at, self.status))
         conn.commit()
         conn.close()
 
@@ -270,13 +272,18 @@ class Matches():
         cur = conn.cursor()
         matches = cur.execute('''
             SELECT 
-                match_id,
-                tournament_id,
-                match_no,
-                round_no,
-                scheduled_at,
-                status
-            FROM matches
+                m.match_id,
+                t.name,
+                m.match_no,
+                m.round_no,
+                tm1.team_name AS team_1,
+                tm2.team_name AS team_2,
+                m.scheduled_at,
+                m.status
+            FROM matches m
+            JOIN tournaments t ON m.tournament_id = t.tournament_id
+            JOIN teams tm1  ON m.team_id_1 = tm1.team_id
+            JOIN teams tm2 ON m.team_id_2 = tm2.team_id
             ORDER BY scheduled_at DESC
         ''').fetchall()
         conn.close()
@@ -287,9 +294,9 @@ class Matches():
         cur = conn.cursor()
         cur.execute('''
         UPDATE matches 
-        SET round_no = ?, scheduled_at = ?, status = ?
+        SET tournament_id = ? , match_no = ? , round_no = ? ,team_id_1 = ? ,team_id_2 = ? , scheduled_at = ? , status = ? 
         WHERE match_id = ?
-        ''', (self.round_no, self.scheduled_at, self.status, self.match_id))
+        ''', (self.tournament_id, self.match_no, self.round_no,self.team_id_1,self.team_id_2, self.scheduled_at, self.status,self.match_id))
         conn.commit()
         conn.close()
 

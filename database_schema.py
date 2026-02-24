@@ -69,13 +69,30 @@ class Data_base():
             tournament_id INTEGER NOT NULL,
             match_no INTEGER NOT NULL,
             round_no INTEGER NOT NULL,
+            team_id_1 INTEGER NOT NULL,
+            team_id_2 INTEGER NOT NULL,
             scheduled_at DATE NOT NULL,
             status VARCHAR(20) NOT NULL,
             FOREIGN KEY (tournament_id) REFERENCES tournaments(tournament_id)
+            FOREIGN KEY (team_id_1) REFERENCES teams(team_id),
+            FOREIGN KEY (team_id_2) REFERENCES teams(team_id),
+            UNIQUE(team_id_1,team_id_2)
         )
         ''')
         print("Matches Table Crated ")
-
+    def scores_table(self):
+        cur.execute('''
+        CREATE TABLE IF NOT EXISTS scores (
+            match_id INTEGER PRIMARY KEY ,
+            tournament_id INTEGER NOT NULL,
+            match_no INTEGER NOT NULL,
+            round_no INTEGER NOT NULL,
+            team_score_1 INTEGER NOT NULL,
+            team_score_2 INTEGER NOT NULL,
+            winner INTEGER,
+        )
+        ''')
+        print("Scores Table Crated ")
     def leader_board_table(self):
         cur.execute('''
         CREATE TABLE IF NOT EXISTS leader_board (

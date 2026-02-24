@@ -5,10 +5,20 @@ curr = conn.cursor()
 
 
 data = curr.execute('''
-    SELECT t.team_id , t.team_name , g.game_name , u.user_name  FROM team_members tm
-        JOIN teams t ON tm.team_id = t.team_id
-        JOIN users u ON t.team_captain_id = u.user_id
-        JOIN games g ON t.game_id = g.game_id
+         SELECT 
+                m.match_id,
+                t.name,
+                m.match_no,
+                m.round_no,
+                tm1.team_name As team_1,
+                tm2.team_name As team_2,
+                m.scheduled_at,
+                m.status
+            FROM matches m
+            JOIN tournaments t ON m.tournament_id = t.tournament_id
+            JOIN teams tm1  ON m.team_id_1 = tm1.team_id
+            JOIN teams tm2  ON m.team_id_2 = tm2.team_id
+            ORDER BY scheduled_at DESC
         ''', )
 
 print([dict(row) for row in data])

@@ -26,6 +26,7 @@
             <th>Tournament</th>
             <th>Match #</th>
             <th>Round</th>
+            <th>Teams</th>
             <th>Scheduled At</th>
             <th>Status</th>
           </tr>
@@ -34,9 +35,10 @@
           {% for match in matches %}
           <tr>
             <td><span class="badge bg-secondary">#{{ match.match_id }}</span></td>
-            <td><strong>{{ match.tournament_id }}</strong></td>
+            <td><strong>{{ match.name }}</strong></td>
             <td>{{ match.match_no }}</td>
             <td>Round {{ match.round_no }}</td>
+            <td>{{ match.team_1 }} VS {{ match.team_2 }}</td>
             <td>{{ match.scheduled_at or '—' }}</td>
             <td>
               <span class="badge 

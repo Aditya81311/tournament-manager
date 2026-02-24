@@ -254,15 +254,18 @@ def delete_tournament():
 def create_match():
     if request.method == "GET":
         tournaments = Fetch_data.fetch_tournaments(None)
-        return render_template('create_matches.html',tournaments = tournaments)
+        teams = Fetch_data.fetch_teams(None)
+        return render_template('create_matches.html',tournaments = tournaments,teams = teams)
     if request.method == "POST":
         # match_id = request.form["match_id"]
         tournament_id = request.form["tournament_id"]
         match_no = request.form["match_no"]
         round_no = request.form["round_no"]
+        team_1 = request.form["team1_id"]
+        team_2 = request.form["team2_id"]
         scheduled_at = request.form["scheduled_at"]
         status = request.form["status"]
-        create = Matches(None,tournament_id, match_no, round_no, scheduled_at, status)
+        create = Matches(None,tournament_id, match_no, round_no,team_1,team_2, scheduled_at, status)
         create.add_match()
         flash("Match Created Successfully",'success')
 
@@ -283,19 +286,22 @@ def update_match():
     if request.method == "GET":
         tournaments = Fetch_data.fetch_tournaments(None)
         matches = Fetch_data.fetch_matches(None)
-        return render_template('update_matches.html',tournaments = tournaments,matches = matches)
+        teams = Fetch_data.fetch_teams(None)
+        return render_template('update_matches.html',tournaments = tournaments,matches = matches,teams = teams)
     if request.method == "POST":
-        # match_id = request.form["match_id"]
+        match_id = request.form["match_id"]
         tournament_id = request.form["tournament_id"]
-        # match_no = request.form["match_no"]
+        match_no = request.form["match_no"]
         round_no = request.form["round_no"]
+        team_1 = request.form["team1_id"]
+        team_2 = request.form["team2_id"]
         scheduled_at = request.form["scheduled_at"]
         status = request.form["status"]
-        create = Matches(None,tournament_id,None, round_no, scheduled_at, status)
+        create = Matches(match_id,tournament_id, match_no, round_no,team_1,team_2, scheduled_at, status)
         create.update_match()
         flash("Match Updated Successfully",'success')
-        return render_template('update_matches.html')
-    
+        return redirect(url_for('update_match'))
+
 @app.route('/delete_matches', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -305,7 +311,7 @@ def delete_match():
         return render_template('delete_matches.html',matches = matches)
     if request.method == "POST":
         match_id = request.form["match_id"]
-        delete = Matches(match_id,None,None,None,None,None)
+        delete = Matches(match_id,None,None,None,None,None,None,None)
         delete.delete_match()
         flash("Match Deleted",'danger')
         return redirect(url_for('delete_match'))
