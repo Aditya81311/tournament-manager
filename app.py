@@ -168,7 +168,7 @@ def update_games():
         update = Games(game_id,game_name,game_genre)
         update.update_game()
         flash("Game Updated Successfully",'success')
-    return render_template("update_games.html")
+        return redirect(url_for('update_games'))
 
 @app.route("/delete_games",methods = ["GET","POST"])
 @login_required
@@ -182,7 +182,7 @@ def delete_games():
         delete = Games(game_id,None,None)
         delete.delete_game()
         flash("Game Deleted!",'danger')
-    return render_template("delete_games.html",games = games)
+        return redirect(url_for('delete_games'))
 
 @app.route('/create_tournaments', methods=['GET','POST'])
 @login_required
