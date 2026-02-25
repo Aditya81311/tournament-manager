@@ -2,41 +2,50 @@ Web App
 │
 ├── Home Page
 │   ├── Navigation Bar
-│   │   ├── Register / Login
+│   │   ├── Register / Login (guest)
+│   │   ├── Dashboard / Logout (logged in)
 │   │   ├── Games
 │   │   ├── Teams
 │   │   ├── Tournaments
-│   │   └── Leaderboard
-│   └── Dashboard (after login)
+│   │   ├── Matches
+│   │   ├── Leaderboard
+│   │   └── Add Scores (admin only)
+│   └── Hero Section (Get Started / Go to Dashboard)
 │
 ├── User Section
-│   ├── Register Form (creates row in users)
-│   ├── Login Form (authenticates user)
-│   └── Profile Page (shows user info, teams joined)
+│   ├── Register Form
+│   ├── Login Form
+│   ├── Create Admin Form
+│   └── Dashboard (quick actions + admin panel)
 │
-├── Games Section
-│   ├── Add Game Form (admin only → inserts into games)
-│   └── List Games (shows all games)
+├── Games Section (admin only)
+│   ├── List Games
+│   ├── Add Game
+│   ├── Update Game
+│   └── Delete Game
 │
 ├── Teams Section
-│   ├── Create Team Form
-│   │   ├── Team name
-│   │   ├── Select game (dropdown from games)
-│   │   └── Captain = current logged-in user
-│   │       → inserts into teams + team_members (captain row)
-│   ├── Join Team Form
-│   │   ├── Dropdown of available teams
-│   │   └── Enroll button
-│   │       → inserts into team_members
-│   └── My Teams (shows teams user is enrolled in)
+│   ├── List All Teams
+│   ├── Create Team
+│   ├── Join Team
+│   ├── My Teams
+│   ├── Update Team (admin only)
+│   └── Delete Team (admin only)
 │
 ├── Tournaments Section
-│   ├── Create Tournament Form (admin → inserts into tournaments)
 │   ├── List Tournaments
-│   └── Tournament Details
-│       ├── Matches (from matches table)
-│       └── Leaderboard (from leader_board table)
+│   ├── Create Tournament (admin only)
+│   ├── Update Tournament (admin only)
+│   └── Delete Tournament (admin only)
+│
+├── Matches Section
+│   ├── List Matches
+│   ├── Create Match (admin only)
+│   ├── Update Match (admin only)
+│   ├── Delete Match (admin only)
+│   └── Add Scores (admin only)
 │
 └── Leaderboard Section
-    ├── View Leaderboard by Tournament
-    └── Team Stats (played, wins, score_for, score_against)
+    ├── Overall Rankings
+    ├── Filter by Tournament
+    └── Team Stats (played, wins, losses, score for, score against, diff, points)
